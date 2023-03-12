@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - "[1-9].x"
+      - "v/[1-9].x"
 
 name: Continuous integration
 
@@ -76,12 +76,6 @@ jobs:
         with:
           command: make
           args: test-default
-
-      - name: Run legacy operation tests
-        uses: actions-rs/cargo@v1
-        with:
-          command: make
-          args: test-legacy-ops
 
       - name: Run mathematical function tests
         uses: actions-rs/cargo@v1

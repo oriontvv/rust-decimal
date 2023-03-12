@@ -17,7 +17,7 @@ name = "rust_decimal"
 readme = "./README.md"
 repository = "https://github.com/paupino/rust-decimal"
 rust-version = "1.60"
-version = "1.29.0"
+version = "2.0.0-alpha.0"
 
 [package.metadata.docs.rs]
 all-features = true
@@ -54,36 +54,58 @@ tokio = { default-features = false, features = ["macros", "rt-multi-thread", "te
 version-sync = { default-features = false, features = ["html_root_url_updated", "markdown_deps_updated"], version = "0.9" }
 
 [features]
-default = ["serde", "std"]
+default = []
 
+# Enable borsh serialization
 borsh = ["dep:borsh", "std"]
-c-repr = [] # Force Decimal to be repr(C)
+
+# Force Decimal to be repr(C)
+c-repr = []
+
+# Enable Diesel support
 db-diesel-mysql = ["db-diesel1-mysql"]
 db-diesel-postgres = ["db-diesel1-postgres"]
 db-diesel1-mysql = ["diesel1/mysql", "std"]
 db-diesel1-postgres = ["diesel1/postgres", "std"]
 db-diesel2-mysql = ["diesel2/mysql", "std"]
 db-diesel2-postgres = ["diesel2/postgres", "std"]
+
+# Enable Postgres support
 db-postgres = ["dep:byteorder", "dep:bytes", "dep:postgres", "std"]
 db-tokio-postgres = ["dep:byteorder", "dep:bytes", "dep:postgres", "std", "dep:tokio-postgres"]
-legacy-ops = []
+
+# Enable mathematical functions
 maths = []
 maths-nopanic = ["maths"]
+
+# Random number support
 rand = ["dep:rand"]
+
+# RKYV serialization
 rkyv = ["dep:rkyv"]
 rkyv-safe = ["dep:bytecheck", "rkyv/validation"]
+
+# Enable Rocket traits
 rocket-traits = ["dep:rocket"]
+
+# Enable support for fuzzing decimals
 rust-fuzz = ["dep:arbitrary"]
+
+
+# Enable serde support
 serde = ["dep:serde"]
 serde-arbitrary-precision = ["serde-with-arbitrary-precision"]
-serde-bincode = ["serde-str"] # Backwards compatability
 serde-float = ["serde-with-float"]
 serde-str = ["serde-with-str"]
-serde-with-arbitrary-precision = ["serde", "serde_json/arbitrary_precision", "serde_json/std"]
-serde-with-float = ["serde"]
-serde-with-str = ["serde"]
+serde-with-arbitrary-precision = ["dep:serde", "serde_json/arbitrary_precision", "serde_json/std"]
+serde-with-float = ["dep:serde"]
+serde-with-str = ["dep:serde"]
+
+# Enable standard library support
 std = ["arrayvec/std", "borsh?/std", "bytecheck?/std", "byteorder?/std", "bytes?/std", "rand?/std", "rkyv?/std", "serde?/std", "serde_json?/std"]
-tokio-pg = ["db-tokio-postgres"] # Backwards compatability
+
+# Enable strict mode, where underflow is an error
+strict = []
 
 [workspace]
 members = [".", "./macros"]

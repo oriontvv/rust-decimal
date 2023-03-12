@@ -541,7 +541,7 @@ fn it_adds_decimals() {
             "108053.27500000000000000000000",
             // This value has too high precision and will be rounded
             "0.000000000000000000000005",
-            either!("108053.27500000000000000000000", "108053.27500000000000000000001"),
+            "108053.27500000000000000000000",
         ),
         (
             "8097370036018690744.2590371109596744091",
@@ -687,7 +687,7 @@ fn it_multiplies_decimals() {
         (
             "0.48000000",
             "0.1818181818181818181818181818",
-            either!("0.0872727272727272727272727273", "0.0872727272727272727272727272"),
+            "0.0872727272727272727272727273",
         ),
     ];
     for &(a, b, c) in tests {
@@ -740,34 +740,26 @@ fn it_divides_decimals() {
         ("2.2", "1.1", "2"),
         ("-2.2", "-1.1", "2"),
         ("12.88", "5.6", "2.3"),
-        (
-            "1023427554493",
-            "43432632",
-            either!("23563.562864276795382789603909", "23563.562864276795382789603908"),
-        ),
+        ("1023427554493", "43432632", "23563.562864276795382789603909"),
         ("10000", "3", "3333.3333333333333333333333333"),
         ("2", "3", "0.6666666666666666666666666667"),
         ("1", "3", "0.3333333333333333333333333333"),
         ("-2", "3", "-0.6666666666666666666666666667"),
         ("2", "-3", "-0.6666666666666666666666666667"),
         ("-2", "-3", "0.6666666666666666666666666667"),
-        (
-            "1234.5678",
-            "0.1234567890123456",
-            either!("9999.99926999999982999953127", "9999.999269999999829999531269"),
-        ),
+        ("1234.5678", "0.1234567890123456", "9999.99926999999982999953127"),
         ("1234.567890123456789012345678", "1.234567890123456789012345678", "1000"),
         (
             "32.91625929004387114334488",
             "3.27629537",
-            either!("10.046792359274942644546996384", "10.046792359274942644546996383"),
+            "10.046792359274942644546996384",
         ),
         ("5000", "1000.26957490549", "4.9986524887277738570721416846"),
         ("6142.6941216127122745222131114", "2", "3071.3470608063561372611065557"),
         (
             "3071.3470608063561372611065557",
             "1228.87000756",
-            either!("2.4993262443638869285360708423", "2.4993262443638869285360708422"),
+            "2.4993262443638869285360708423",
         ),
         (
             "590.3274854004009467754255123",
@@ -833,7 +825,6 @@ fn it_rems_decimals() {
         ("4", "3.1", "0.9"),
         ("2", "2", "0"),
         ("2", "-2", "0"),
-        // Legacy keeps sign from lhs operand
         ("-2", "2", "0"),
         ("-2", "-2", "0"),
     ];
@@ -2254,9 +2245,6 @@ fn it_can_round_using_bankers_rounding() {
     ];
     for &(input, dp, expected) in tests {
         let a = Decimal::from_str(input).unwrap();
-        #[allow(deprecated)]
-        let b = a.round_dp_with_strategy(dp, RoundingStrategy::BankersRounding);
-        assert_eq!(expected, b.to_string(), "BankersRounding");
 
         // Recommended replacement
         let b = a.round_dp_with_strategy(dp, RoundingStrategy::MidpointNearestEven);
@@ -2270,10 +2258,6 @@ fn it_can_round_complex_numbers_using_bankers_rounding() {
     let rate = Decimal::new(19, 2); // 0.19
     let one = Decimal::new(1, 0); // 1
     let part = rate / (rate + one); // 0.19 / (0.19 + 1) = 0.1596638655462184873949579832
-
-    #[allow(deprecated)]
-    let part = part.round_dp_with_strategy(2, RoundingStrategy::BankersRounding); // 0.16
-    assert_eq!("0.16", part.to_string(), "BankersRounding");
 
     // Recommended replacement
     let part = part.round_dp_with_strategy(2, RoundingStrategy::MidpointNearestEven); // 0.16
@@ -2296,9 +2280,6 @@ fn it_can_round_using_round_half_up() {
     ];
     for &(input, dp, expected) in tests {
         let a = Decimal::from_str(input).unwrap();
-        #[allow(deprecated)]
-        let b = a.round_dp_with_strategy(dp, RoundingStrategy::RoundHalfUp);
-        assert_eq!(expected, b.to_string(), "RoundHalfUp");
 
         // Recommended replacement
         let b = a.round_dp_with_strategy(dp, RoundingStrategy::MidpointAwayFromZero);
@@ -2312,9 +2293,6 @@ fn it_can_round_complex_numbers_using_round_half_up() {
     let rate = Decimal::new(19, 2); // 0.19
     let one = Decimal::new(1, 0); // 1
     let part = rate / (rate + one); // 0.19 / (0.19 + 1) = 0.1596638655462184873949579832
-    #[allow(deprecated)]
-    let part = part.round_dp_with_strategy(2, RoundingStrategy::RoundHalfUp); // 0.16
-    assert_eq!("0.16", part.to_string(), "RoundHalfUp");
 
     // Recommended replacement
     let part = part.round_dp_with_strategy(2, RoundingStrategy::MidpointAwayFromZero); // 0.16
@@ -2337,9 +2315,6 @@ fn it_can_round_using_round_half_down() {
     ];
     for &(input, dp, expected) in tests {
         let a = Decimal::from_str(input).unwrap();
-        #[allow(deprecated)]
-        let b = a.round_dp_with_strategy(dp, RoundingStrategy::RoundHalfDown);
-        assert_eq!(expected, b.to_string(), "RoundHalfDown");
 
         // Recommended replacement
         let b = a.round_dp_with_strategy(dp, RoundingStrategy::MidpointTowardZero);
@@ -2353,10 +2328,6 @@ fn it_can_round_complex_numbers_using_round_half_down() {
     let rate = Decimal::new(19, 2); // 0.19
     let one = Decimal::new(1, 0); // 1
     let part = rate / (rate + one); // 0.19 / (0.19 + 1) = 0.1596638655462184873949579832
-
-    #[allow(deprecated)]
-    let part = part.round_dp_with_strategy(2, RoundingStrategy::RoundHalfDown); // 0.16
-    assert_eq!("0.16", part.to_string(), "RoundHalfDown");
 
     // Recommended replacement
     let part = part.round_dp_with_strategy(2, RoundingStrategy::MidpointTowardZero); // 0.16
@@ -2490,9 +2461,6 @@ fn it_can_round_down() {
     ];
     for &(input, dp, expected) in tests {
         let a = Decimal::from_str(input).unwrap();
-        #[allow(deprecated)]
-        let b = a.round_dp_with_strategy(dp, RoundingStrategy::RoundDown);
-        assert_eq!(expected, b.to_string(), "RoundDown");
 
         // Recommended replacement
         let b = a.round_dp_with_strategy(dp, RoundingStrategy::ToZero);
@@ -2517,9 +2485,6 @@ fn it_can_round_up() {
 
     for &(input, dp, expected) in tests {
         let a = Decimal::from_str(input).unwrap();
-        #[allow(deprecated)]
-        let b = a.round_dp_with_strategy(dp, RoundingStrategy::RoundUp);
-        assert_eq!(expected, b.to_string(), "RoundUp");
 
         // Recommended replacement
         let b = a.round_dp_with_strategy(dp, RoundingStrategy::AwayFromZero);
@@ -3651,11 +3616,7 @@ mod maths {
             ("-2", 3, "-8"),
             ("2", -3, "0.125"),
             ("-2", -3, "-0.125"),
-            (
-                "3",
-                -3,
-                either!("0.037037037037037037037037037", "0.0370370370370370370370370370"),
-            ),
+            ("3", -3, "0.037037037037037037037037037"),
             ("6", 3, "216"),
             ("0.5", 2, "0.25"),
         ];
@@ -3685,22 +3646,14 @@ mod maths {
             ("-2.00", "3.00", "-8"),
             ("2.00", "-3.00", "0.125"),
             ("-2.00", "-3.00", "-0.125"),
-            (
-                "3",
-                "-3",
-                either!("0.037037037037037037037037037", "0.0370370370370370370370370370"),
-            ),
+            ("3", "-3", "0.037037037037037037037037037"),
             ("6", "3", "216"),
             ("0.5", "2", "0.25"),
             ("6", "13", "13060694016"),
             // Exact result: 1 / 6^7
             ("6", "-7", "0.0000035722450845907636031093"),
             // ~= 0.8408964152537145
-            (
-                "0.5",
-                "0.25",
-                either!("0.8408964159265360661551317741", "0.8408964159265360661551317742"),
-            ),
+            ("0.5", "0.25", "0.8408964159265360661551317741"),
             // ~= 0.999999999999999999999999999790814
             (
                 "0.1234567890123456789012345678",
@@ -3708,27 +3661,15 @@ mod maths {
                 "0.9999999999999999999999999998",
             ),
             // ~= 611.0451043224257
-            (
-                "1234.5678",
-                "0.9012",
-                either!("611.04510415448740041442807964", "611.04510415448740041442807964"),
-            ),
-            (
-                "-2",
-                "0.5",
-                either!("-1.4142135570048917090885260834", "-1.4142135570048917090885260835"),
-            ),
+            ("1234.5678", "0.9012", "611.04510415448740041442807964"),
+            ("-2", "0.5", "-1.4142135570048917090885260834"),
             // ~= -1.1193003023312942
-            (
-                "-2.5",
-                "0.123",
-                either!("-1.1193002994383985239135362086", "-1.1193002994383985239135362086"),
-            ),
+            ("-2.5", "0.123", "-1.1193002994383985239135362086"),
             // ~= 0.0003493091
             (
                 "0.0000000000000000000000000001",
                 "0.1234567890123456789012345678",
-                either!("0.0003533642875741443321850682", "0.0003305188683169079961720764"),
+                "0.0003533642875741443321850682",
             ),
         ];
         for &(x, y, expected) in test_cases {
@@ -3758,7 +3699,6 @@ mod maths {
         assert_eq!(Decimal::new(-2, 0).sqrt(), None);
     }
 
-    #[cfg(not(feature = "legacy-ops"))]
     #[test]
     fn test_exp() {
         // These are approximations
@@ -3792,7 +3732,6 @@ mod maths {
         }
     }
 
-    #[cfg(not(feature = "legacy-ops"))]
     #[test]
     fn test_exp_with_tolerance() {
         let test_cases = &[
@@ -3801,11 +3740,7 @@ mod maths {
             // e^1 ~= 2.7182539682539682539682539683
             ("1", "0.0002", "2.7182539682539682539682539683"),
             // e^10 ~= 22026.465794806703
-            (
-                "10",
-                "0.02",
-                either!("22026.416157416030662013737698", "22026.416157416030662013737699"),
-            ),
+            ("10", "0.02", "22026.416157416030662013737698"),
             // e^11 ~= 59874.14171519778
             ("11", "0.0002", "59873.388231055804982198781924"),
             // e^11.7578 ~= 127741.03548949540892948423052
@@ -3870,39 +3805,23 @@ mod maths {
         let test_cases = &[
             (
                 Decimal::from_str("-0.4").unwrap(),
-                either!(
-                    Decimal::from_str("0.3445781286821245037094401704").unwrap(),
-                    Decimal::from_str("0.3445781286821245037094401728").unwrap()
-                ),
+                Decimal::from_str("0.3445781286821245037094401704").unwrap(),
             ),
             (
                 Decimal::from_str("-0.1").unwrap(),
-                either!(
-                    Decimal::from_str("0.4601722899186706579921922696").unwrap(),
-                    Decimal::from_str("0.4601722899186706579921922711").unwrap()
-                ),
+                Decimal::from_str("0.4601722899186706579921922696").unwrap(),
             ),
             (
                 Decimal::from_str("0.1").unwrap(),
-                Decimal::from_str(either!(
-                    "0.5398277100813293420078077304",
-                    "0.5398277100813293420078077290"
-                ))
-                .unwrap(),
+                Decimal::from_str("0.5398277100813293420078077304").unwrap(),
             ),
             (
                 Decimal::from_str("0.4").unwrap(),
-                either!(
-                    Decimal::from_str("0.6554218713178754962905598296").unwrap(),
-                    Decimal::from_str("0.6554218713178754962905598272").unwrap()
-                ),
+                Decimal::from_str("0.6554218713178754962905598296").unwrap(),
             ),
             (
                 Decimal::from_str("2.0").unwrap(),
-                either!(
-                    Decimal::from_str("0.9772497381095865280953380673").unwrap(),
-                    Decimal::from_str("0.9772497381095865280953380672").unwrap()
-                ),
+                Decimal::from_str("0.9772497381095865280953380673").unwrap(),
             ),
         ];
         for case in test_cases {
@@ -3948,22 +3867,13 @@ mod maths {
         let test_cases = [
             ("1", "0"),
             // Wolfram Alpha gives -1.46968
-            (
-                "0.23",
-                either!("-1.4696759700589416772292300779", "-1.4696759700589416772292300777"),
-            ),
+            ("0.23", "-1.4696759700589416772292300779"),
             // Wolfram Alpha gives 0.693147180559945309417232121458176568075500134360255254120
             ("2", "0.6931471805599453094172321218"),
             // Wolfram Alpha gives 3.218875824868200749201518666452375279051202708537035443825
-            (
-                "25",
-                either!("3.2188758248682007492015186670", "3.2188758248682007492015186674"),
-            ),
+            ("25", "3.2188758248682007492015186670"),
             // Wolfram Alpha gives 0.210721022
-            (
-                "1.234567890",
-                either!("0.2107210222156525610500017104", "0.2107210222156525610500017106"),
-            ),
+            ("1.234567890", "0.2107210222156525610500017104"),
         ];
 
         for (input, expected) in test_cases {
@@ -4003,15 +3913,9 @@ mod maths {
         let test_cases = [
             ("1", "0"),
             // Wolfram Alpha: 0.3010299956639811952137388947
-            (
-                "2",
-                either!("0.3010299956639811952137388949", "0.3010299956639811952137388948"),
-            ),
+            ("2", "0.3010299956639811952137388949"),
             // Wolfram Alpha: 0.0915149772
-            (
-                "1.234567890",
-                either!("0.0915149771692704475183336230", "0.0915149771692704475183336231"),
-            ),
+            ("1.234567890", "0.0915149771692704475183336230"),
             ("10", "1"),
             ("100", "2"),
             ("1000", "3"),
@@ -4112,11 +4016,8 @@ mod maths {
             ("4", Some("-0.7568024953079282513726390945")),
             // Sin(6) ~= -0.279415498198925872811555446611894759627994864318204318483351369
             ("6", Some("-0.2794154981989258728115554466")),
-            // WA estimate: -0.893653245236708. Legacy ops is closer to f64 accuracy.
-            (
-                "-79228162514264.337593543950335",
-                Some(either!("-0.893653245236708", "-0.8963358176")),
-            ),
+            // WA estimate: -0.893653245236708.
+            ("-79228162514264.337593543950335", Some("-0.893653245236708")),
         ];
         for (input, result) in test_cases {
             let radians = Decimal::from_str(input).unwrap();
@@ -4153,11 +4054,8 @@ mod maths {
             ("4", Some("-0.6536436208636119146391681831")),
             // Cos(6) ~= 0.9601702866503660205456522979229244054519376792110126981292864260
             ("6", Some("0.9601702866503660205456522979")),
-            // WA estimate: 0.448758150096352. Legacy ops is closer to f64 accuracy.
-            (
-                "-79228162514264.337593543950335",
-                Some(either!("0.448758150096352", "0.443375802326")),
-            ),
+            // WA estimate: 0.448758150096352.
+            ("-79228162514264.337593543950335", Some("0.448758150096352")),
         ];
         for (input, result) in test_cases {
             let radians = Decimal::from_str(input).unwrap();
@@ -4194,11 +4092,8 @@ mod maths {
             ("4", Some("1.1578212823495775831373424183")),
             // Tan(6) ~= -0.291006191384749157053699588868175542831155570912339131608827193
             ("6", Some("-0.2910061913847491570536995889")),
-            // WA estimate: -1.99139167733184. Legacy ops is closer to f64 accuracy.
-            (
-                "-79228162514264.337593543950335",
-                Some(either!("-1.99139167733184", "-2.021616454709")),
-            ),
+            // WA estimate: -1.99139167733184.
+            ("-79228162514264.337593543950335", Some("-1.99139167733184")),
         ];
         for (input, result) in test_cases {
             let radians = Decimal::from_str(input).unwrap();
@@ -4215,7 +4110,6 @@ mod maths {
 }
 
 // Generated tests
-#[cfg(not(feature = "legacy-ops"))]
 mod generated {
     use rust_decimal::prelude::*;
 
