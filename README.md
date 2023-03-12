@@ -99,7 +99,6 @@ assert_eq!(total, dec!(27.26));
 
 * [borsh](#borsh)
 * [c-repr](#c-repr)
-* [legacy-ops](#legacy-ops)
 * [maths](#maths)
 * [rkyv](#rkyv)
 * [rocket-traits](#rocket-traits)
@@ -151,13 +150,6 @@ Enable `diesel` MySQL support. By default, this enables version `1.4` of `diesel
 version of `diesel` then you can do so by using the feature `db-diesel2-mysql`. Please note, if both features are
 enabled then version 2 will supersede version 1.
 
-### `legacy-ops`
-
-**Warning:** This is deprecated and will be removed from a future versions.
-
-As of `1.10` the algorithms used to perform basic operations have changed which has benefits of significant speed improvements.
-To maintain backwards compatibility this can be opted out of by enabling the `legacy-ops` feature.
-
 ### `maths`
 
 The `maths` feature enables additional complex mathematical functions such as `pow`, `ln`, `enf`, `exp` etc.
@@ -165,8 +157,7 @@ Documentation detailing the additional functions can be found on the
 [`MathematicalOps`](https://docs.rs/rust_decimal/latest/rust_decimal/trait.MathematicalOps.html) trait.  
 
 Please note that `ln` and `log10` will panic on invalid input with `checked_ln` and `checked_log10` the preferred functions
-to curb against this. When the `maths` feature was first developed the library would instead return `0` on invalid input. To re-enable this
-non-panicking behavior, please use the feature: `maths-nopanic`.
+to curb against this. 
 
 ### `rand`
 

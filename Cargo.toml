@@ -63,8 +63,8 @@ borsh = ["dep:borsh", "std"]
 c-repr = []
 
 # Enable Diesel support
-db-diesel-mysql = ["db-diesel1-mysql"]
-db-diesel-postgres = ["db-diesel1-postgres"]
+db-diesel-mysql = ["db-diesel2-mysql"]
+db-diesel-postgres = ["db-diesel2-postgres"]
 db-diesel1-mysql = ["diesel1/mysql", "std"]
 db-diesel1-postgres = ["diesel1/postgres", "std"]
 db-diesel2-mysql = ["diesel2/mysql", "std"]
@@ -76,7 +76,6 @@ db-tokio-postgres = ["dep:byteorder", "dep:bytes", "dep:postgres", "std", "dep:t
 
 # Enable mathematical functions
 maths = []
-maths-nopanic = ["maths"]
 
 # Random number support
 rand = ["dep:rand"]

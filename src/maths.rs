@@ -357,15 +357,6 @@ impl MathematicalOps for Decimal {
         Some(result)
     }
 
-    #[cfg(feature = "maths-nopanic")]
-    fn ln(&self) -> Decimal {
-        match self.checked_ln() {
-            Some(result) => result,
-            None => Decimal::ZERO,
-        }
-    }
-
-    #[cfg(not(feature = "maths-nopanic"))]
     fn ln(&self) -> Decimal {
         match self.checked_ln() {
             Some(result) => result,
@@ -417,15 +408,6 @@ impl MathematicalOps for Decimal {
         Some(Decimal::new(count, 0) - result)
     }
 
-    #[cfg(feature = "maths-nopanic")]
-    fn log10(&self) -> Decimal {
-        match self.checked_log10() {
-            Some(result) => result,
-            None => Decimal::ZERO,
-        }
-    }
-
-    #[cfg(not(feature = "maths-nopanic"))]
     fn log10(&self) -> Decimal {
         match self.checked_log10() {
             Some(result) => result,
