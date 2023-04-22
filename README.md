@@ -100,6 +100,7 @@ assert_eq!(total, dec!(27.26));
 * [borsh](#borsh)
 * [c-repr](#c-repr)
 * [maths](#maths)
+* [ndarray](#ndarray)
 * [rkyv](#rkyv)
 * [rocket-traits](#rocket-traits)
 * [rust-fuzz](#rust-fuzz)
@@ -158,6 +159,10 @@ Documentation detailing the additional functions can be found on the
 
 Please note that `ln` and `log10` will panic on invalid input with `checked_ln` and `checked_log10` the preferred functions
 to curb against this. 
+
+### `ndarray`
+
+Enables arithmetic operations using [`ndarray`](https://github.com/rust-ndarray/ndarray) on arrays of `Decimal`.
 
 ### `rand`
 
