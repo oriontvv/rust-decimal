@@ -65,11 +65,11 @@ jobs:
           command: build
           args: --workspace --all-features # Important to keep this to ensure docs.rs passes
 
-      - name: Run no_std tests
+      - name: Run std tests
         uses: actions-rs/cargo@v1
         with:
           command: make
-          args: test-no-std
+          args: test-std
 
       - name: Run default tests
         uses: actions-rs/cargo@v1
