@@ -31,8 +31,8 @@ args = ["test", "--workspace", "--features=default"]
 # This should reflect the steps in github
 [tasks.test-all]
 dependencies = [
-    "test-no-std",
     "test-default",
+    "test-std",
     "test-maths",
     "test-misc",
     "test-db",
