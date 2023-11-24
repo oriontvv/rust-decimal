@@ -32,24 +32,9 @@ mod proptest;
 mod rand;
 #[cfg(feature = "rocket-traits")]
 mod rocket;
-#[cfg(all(
-    feature = "serde",
-    not(any(
-        feature = "serde-with-str",
-        feature = "serde-with-float",
-        feature = "serde-with-arbitrary-precision"
-    ))
-))]
-mod serde;
+
 /// Serde specific functionality to customize how a decimal is serialized/deserialized (`serde_with`)
-#[cfg(all(
-    feature = "serde",
-    any(
-        feature = "serde-with-str",
-        feature = "serde-with-float",
-        feature = "serde-with-arbitrary-precision"
-    )
-))]
+#[cfg(feature = "__serde__")]
 pub mod serde;
 
 pub use decimal::{Decimal, RoundingStrategy};

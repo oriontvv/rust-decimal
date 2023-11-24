@@ -49,7 +49,7 @@ tokio = { default-features = false, features = ["macros", "rt-multi-thread", "te
 version-sync = { default-features = false, features = ["html_root_url_updated", "markdown_deps_updated"], version = "0.9" }
 
 [features]
-default = ["serde", "std"]
+default = ["std"]
 
 borsh = ["dep:borsh", "std"]
 c-repr = [] # Force Decimal to be repr(C)
@@ -71,14 +71,26 @@ rkyv = ["dep:rkyv"]
 rkyv-safe = ["rkyv/validation"]
 rocket-traits = ["dep:rocket"]
 rust-fuzz = ["dep:arbitrary"]
-serde = ["dep:serde"]
-serde-arbitrary-precision = ["serde-with-arbitrary-precision"]
+
+__serde__ = ["dep:serde"] # Not intended for public use
+
+serde-serialize-arbitrary-precision = ["__serde__", "serde_json/arbitrary_precision", "serde_json/std"]
+serde-deserialize-arbitrary-precision = ["__serde__", "serde_json/arbitrary_precision", "serde_json/std"]
+serde-arbitrary-precision = ["serde-serialize-arbitrary-precision", "serde-deserialize-arbitrary-precision"]
+serde-with-arbitrary-precision = ["serde-arbitrary-precision"] # Backwards compatability
+
+serde-serialize-float = ["__serde__"]
+serde-deserialize-float = ["__serde__"]
+serde-float = ["serde-serialize-float", "serde-deserialize-float"]
+serde-with-float = ["serde-float"] # Backwards compatability
+
+serde-serialize-str = ["__serde__"]
+serde-deserialize-str = ["__serde__"]
+serde-str = ["serde-serialize-str", "serde-deserialize-str"]
+serde-with-str = ["serde-str"] # Backwards compatability
 serde-bincode = ["serde-str"] # Backwards compatability
-serde-float = ["serde-with-float"]
-serde-str = ["serde-with-str"]
-serde-with-arbitrary-precision = ["serde", "serde_json/arbitrary_precision", "serde_json/std"]
-serde-with-float = ["serde"]
-serde-with-str = ["serde"]
+serde = ["serde-str"]
+
 std = ["arrayvec/std", "borsh?/std", "bytes?/std", "rand?/std", "rkyv?/std", "serde?/std", "serde_json?/std"]
 tokio-pg = ["db-tokio-postgres"] # Backwards compatability
 
